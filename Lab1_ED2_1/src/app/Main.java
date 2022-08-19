@@ -17,7 +17,7 @@ public class Main {
         
         ArbolB<Persona> arbolPersonas = new ArbolB();
         Persona personaPrueba = new Persona( 1234567891, "megan", "12/01/2002", "guatemala");
-       
+        arbolPersonas.insertarEnArbol(personaPrueba);
     }
     
 }
