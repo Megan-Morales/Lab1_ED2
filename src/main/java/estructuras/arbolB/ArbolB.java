@@ -5,10 +5,12 @@
  */
 package estructuras.arbolB;
 
+
+
 /**
  *
  * @author megan
  */
-public class ArbolB {
+public class ArbolB<E extends Comparable<E>> {
     
 }

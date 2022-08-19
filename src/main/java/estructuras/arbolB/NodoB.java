@@ -9,6 +9,7 @@ package estructuras.arbolB;
  *
  * @author megan
  */
-public class NodoB {
+public class NodoB<E extends Comparable<E>> {
+    
     
 }

@@ -1,0 +1,15 @@
+INSERT; {"name":"megan","dpi":"1459876333201","dateBirth":"01/02/2002","address":"guatemala"}
+INSERT; {"name":"andrea","dpi":"3220189657412","dateBirth":"12/01/2002","address":"peten"}
+INSERT; {"name":"diego","dpi":"3701596478210","dateBirth":"20/02/1995","address":"guatemala"}
+INSERT; {"name":"sandra","dpi":"9658230147856","dateBirth":"29/05/2001","address":"guatemala"}
+INSERT; {"name":"andy","dpi":"7854632195221","dateBirth":"13/08/1996","address":"escuintla"}
+INSERT; {"name":"megan","dpi":"6633298659654","dateBirth":"01/02/2002","address":"escuintla"}
+INSERT; {"name":"diego","dpi":"4445633987555","dateBirth":"08/11/1999","address":"guatemala"}
+INSERT; {"name":"juan","dpi":"7458963214556","dateBirth":"18/02/2002","address":"guatemala"}
+INSERT; {"name":"carlos","dpi":"5665935521478","dateBirth":"01/03/2003","address":"escuintla"}
+INSERT; {"name":"kelly","dpi":"4747858596326","dateBirth":"01/04/1996","address":"guatemala"}
+INSERT; {"name":"sandra","dpi":"6936258741020","dateBirth":"01/05/2002","address":"guatemala"}
+PATCH; {"name":"juan","dpi":"7458963214556","address":"peten"}
+PATCH; {"name":"carlos","dpi":"5665935521478","dateBirth":"06/03/2002"}
+DELETE; {"name":"diego","dpi":"3701596478210","dateBirth":"20/02/1995","address":"guatemala"}
+DELETE; {"name":"sandra","dpi":"9658230147856","dateBirth":"29/05/2001","address":"guatemala"}
