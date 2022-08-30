@@ -31,7 +31,11 @@ public void insertarEnPagina(NodoB nuevo) {
             NodoB aux = primero;
             while (aux != null) {
                 if (aux.valor.compareTo(nuevo.valor) == 0 ) {//------------->ya existe en el arbol, validacion que no me permite repetidos
-                    System.out.println("El ID " + nuevo.valor + " ya existe");
+                    if(aux.cabeza == false ){
+                        aux.cabeza = true;
+                    }
+                    aux.listaRepetidos.insertElement_AtEnding(nuevo.valor);
+                    
                     break;
                 } else {
                     if (aux.valor.compareTo(nuevo.valor) > 0) {

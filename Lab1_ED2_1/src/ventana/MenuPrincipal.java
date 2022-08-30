@@ -5,10 +5,27 @@
  */
 package ventana;
 
+import clases.Persona;
+import estructuras.arbolB.ArbolB;
+import estructuras.linkedlist.LinkedList;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
+//librerías de json
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  *
@@ -16,11 +33,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
+    ArbolB<Persona> arbolPersonas;
+
     /**
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal() {
         initComponents();
+    }
+
+    /**
+     * Creates new form MenuPrincipal
+     */
+    public MenuPrincipal(ArbolB<Persona> arbolPersonas) {
+        initComponents();
+        this.arbolPersonas = arbolPersonas;
     }
 
     /**
@@ -41,6 +68,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,6 +108,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Buscar cliente"));
 
         jButton2.setText("Ir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Buscar persona:");
 
@@ -109,37 +143,50 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setText("Bienvenido a Talent Hub");
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jButton3.setText("Exportar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(255, 255, 255)
+                        .addGap(230, 230, 230)
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel3)
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -147,16 +194,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //boton para cargar el archivo
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-JFileChooser accion = null;     // declaras tu variable de escogedor de archivos.
+
+        JFileChooser accion = null;     // declarar variable de escogedor de archivos.
         File archivo = null;            // Variable de tipo File, o sea que es la variable que guarda la información del archivo seleccionado.
-        accion = new JFileChooser("./"); // declaras un objeto de escogedor de archivos, que se va a abrir en la ruta ("./").
+        accion = new JFileChooser("./"); // declarar un objeto de escogedor de archivos, que se va a abrir en la ruta ("./").
         // Nota: recordar que ("./") se refiere a la dirección donde estoy ejecutando mi programa
         accion.setFileSelectionMode(0); //que se va a eligir un archivo.
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("CSV", "csv"); //creamos filtro
         accion.setFileFilter(filtro); //aplicamos filtro
         accion.setDialogTitle("Abrir archivo"); // Titulo de la ventana de selección de archivos
-        
+
         if (accion.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { //caso en que escogimos archivos.
             archivo = accion.getSelectedFile(); //archivo va a ser igual al archivo que escogimos
             System.out.println(accion.getSelectedFile().toString()); //Imprimir ruta de mi archivo
@@ -164,7 +213,36 @@ JFileChooser accion = null;     // declaras tu variable de escogedor de archivos
                 /*Si existe el fichero*/
                 if (archivo.exists()) {
                     FileReader lectura = new FileReader(archivo);
-                    System.out.println("Fichero valido!!!");
+                    String texto = "", linea = "";
+                    BufferedReader br = new BufferedReader(lectura);
+                    String[] accion_archivo;
+                    while ((linea = br.readLine()) != null) {
+
+                        accion_archivo = linea.split(";"); // separar el archivo de texto
+                        accion_archivo[1] = "[" + accion_archivo[1] + "]"; //contruyendo json
+                        JsonParser parser = new JsonParser();
+                        JsonArray gsonArr = parser.parse(accion_archivo[1]).getAsJsonArray(); //obteniendo el array de json
+                        Persona persona = new Persona(0, "", "", "");
+                        for (JsonElement obj : gsonArr) {            //para elemento del jsonArray
+
+                            //extraer el objeto del array, o castear
+                            JsonObject gsonObject = obj.getAsJsonObject();
+                            String name = gsonObject.get("name").getAsString();
+                            long dpi = gsonObject.get("dpi").getAsLong();
+                            String datebirth = gsonObject.get("datebirth").getAsString();
+                            String address = gsonObject.get("address").getAsString();
+                            persona = new Persona(dpi, name, datebirth, address);
+                        }
+
+                        if (accion_archivo[0].equals("INSERT")) {
+
+                            arbolPersonas.insertarEnArbol(persona);
+                        }
+                        else if(accion_archivo[0].equals("PATCH")){
+                            //patch(dpi, name, datebirth, address);
+                        }
+                    }
+                    System.out.println("");
                 } else {
                     System.out.println("Fichero No Existe");
                 }
@@ -176,6 +254,60 @@ JFileChooser accion = null;     // declaras tu variable de escogedor de archivos
             System.out.println("No se selecciono fichero");
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    //boton buscar
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String nombre_Buscar = jTextField1.getText();
+        Persona persona_Buscar = new Persona(0, nombre_Buscar, "", "");
+        LinkedList lista_buscada = arbolPersonas.getValorNodoB_by_Name(persona_Buscar);
+        String listado = "";
+        for (int i = 0; i < lista_buscada.getlength(); i++) {
+            Persona persona2 = (Persona) lista_buscada.getNode(i).getValor();
+            if (persona_Buscar.getNombre().equals(persona2.getNombre())) {
+                System.out.println("" + persona2.toString());
+                listado += persona2.toString() + '\n';
+                jTextArea1.setText(listado);
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    //boton de exportar archivo jsonl
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String nombre_Buscar = jTextField1.getText();
+        Persona persona_Buscar = new Persona(0, nombre_Buscar, "", "");
+        LinkedList lista_buscada = arbolPersonas.getValorNodoB_by_Name(persona_Buscar);
+        String listado = "";
+        for (int i = 0; i < lista_buscada.getlength(); i++) {
+            Persona persona2 = (Persona) lista_buscada.getNode(i).getValor();
+            if (persona_Buscar.getNombre().equals(persona2.getNombre())) {
+                System.out.println("" + persona2.toString());
+                listado += persona2.toString() + '\n';
+            }
+
+        }
+
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        //Parte de la creación de un fichero
+        try {
+            fichero = new FileWriter("." + "/" + nombre_Buscar + ".JSONL");
+            pw = new PrintWriter(fichero);
+            pw.println(listado);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Nuevamente aprovechamos el finally para
+                // asegurarnos que se cierra el fichero.
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,15 +344,28 @@ JFileChooser accion = null;     // declaras tu variable de escogedor de archivos
         });
     }
 
+    /**
+     *
+     * @param dpiBuscar por medio de este parametro
+     * @param nameBuscar
+     * @param dateModificar
+     * @param addressModificar
+     */
+    public void patch(long dpiBuscar, String nameBuscar, String dateModificar, String addressModificar) {
+
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

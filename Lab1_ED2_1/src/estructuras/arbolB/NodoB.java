@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package estructuras.arbolB;
+import estructuras.linkedlist.LinkedList;
 
 /**
  *
@@ -16,11 +17,15 @@ public class NodoB<E extends Comparable<E>> {
     NodoB<E> anterior, siguiente;
     Pagina hijoIzq;
     Pagina hijoDer;
+    //repetidos
+    LinkedList<E> listaRepetidos;
+    boolean cabeza = false;
 
     public NodoB(E valor) {  //contructor de mi clase
         this.valor = valor;
         this.anterior = this.siguiente=null;
         this.hijoIzq = this.hijoDer= null;
+        this.listaRepetidos = new LinkedList<E>();
     }
 
     public NodoB(E valor, Pagina izquierda, Pagina derecha){ //Segundo constructor, aplicar sobre carga de constructores 
@@ -28,6 +33,7 @@ public class NodoB<E extends Comparable<E>> {
         this.anterior=this.siguiente=null;
         this.hijoIzq=izquierda;
         this.hijoDer=derecha;
+        this.listaRepetidos = new LinkedList<E>();
     }
     
 }

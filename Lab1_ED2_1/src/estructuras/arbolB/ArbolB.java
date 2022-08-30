@@ -52,7 +52,11 @@ public class ArbolB<E extends Comparable<E>> {
              */
             NodoB nodoActual = pagina.primero;
             do {
-                if (nodoNuevo.valor.compareTo(nodoActual.valor) == 0) { //Si tiene le mismo valor, ya no ingresas nada.
+                if (nodoNuevo.valor.compareTo(nodoActual.valor) == 0) { //Si tiene le mismo valor, se inserta en una lista enlazada
+                    if(nodoActual.cabeza == false ){
+                        nodoActual.cabeza = true;
+                    }
+                    nodoActual.listaRepetidos.insertElement_AtEnding(nodoNuevo.valor);
                     return null;
                 } else if (nodoNuevo.valor.compareTo(nodoActual.valor) < 0) { //si es menor te tienes que desplazar a la página hijoIzq del nodoActual recorrido.
                     NodoB obj = insertar_En_Pagina(nodoNuevo, nodoActual.hijoIzq);
@@ -164,5 +168,43 @@ public class ArbolB<E extends Comparable<E>> {
         }
     }
     
+    //==================================================MÉTODOS DE BÚSQUEDA==================================================
+
+    /**
+     * Nota: recordar que este método me devuelve la lista de posibles valores repetidos 
+     * o una lista con un único elemento sino existen valores repetidos.
+     * @param valorBuscado
+     * @return
+     */
+    
+    public LinkedList<E> getValorNodoB_by_Name(E valorBuscado) {
+        return getValorNodo_by_Name(raiz, valorBuscado);
+    }
+
+    private LinkedList<E> getValorNodo_by_Name(Pagina paginaActual, E valorBuscado) {
+        if (paginaActual != null) {
+            //recorrer los hijos de cada clave
+            NodoB<E> nodoActual = paginaActual.primero;
+            while (nodoActual != null) {
+                if (valorBuscado.compareTo(nodoActual.valor) == 0) {
+                    LinkedList<E> listaValoresNodo = new LinkedList<>(); // creo mi lista
+                    // verifico si mi nodo es una cabeza o sea si tiene una lista y la recorre
+                    listaValoresNodo.insertElement_AtEnding(nodoActual.valor);
+                    Object[] listaRepetidos = nodoActual.listaRepetidos.getArrayfromLinkedList();// todo hereda de object, para iterar utilizamos el getArrayfromLinkedList()
+                    for (int i = 0; i < listaRepetidos.length; i++) {
+                        E repetido = (E)listaRepetidos[i]; //hacemos el casteo correspondiente
+                        listaValoresNodo.insertElement_AtEnding(repetido); //insertamos el repetido en la lista de repetidos.
+                    }
+                    return listaValoresNodo;
+                } else if (valorBuscado.compareTo(nodoActual.valor) < 0) { // Si el valor buscado es menor al del nodo actual.
+                    return getValorNodo_by_Name(nodoActual.hijoIzq, valorBuscado);
+                } else if (nodoActual.siguiente == null) { //Si llego al último nodo ahí si debería irse por la derecha.
+                    return getValorNodo_by_Name(nodoActual.hijoDer, valorBuscado);
+                }
+                nodoActual = nodoActual.siguiente;
+            }
+        }
+        return null;
+    }
   
 }
