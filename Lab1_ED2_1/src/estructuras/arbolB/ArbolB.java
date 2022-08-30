@@ -135,6 +135,10 @@ public class ArbolB<E extends Comparable<E>> {
         return nodoGenerado;
     }
    //==================================================MÉTODO DE ELIMINACIÓN ==================================================
+    /**
+     * // Método de eliminación parte 1
+     * @param valor 
+     */
     public void eliminarEnArbol(E valor){
         NodoB nodo = new NodoB(valor);
         
@@ -148,7 +152,12 @@ public class ArbolB<E extends Comparable<E>> {
         
     }
     
-    public void eliminar_En_Pagina(NodoB nodoEliminar, Pagina pagina ){
+    /**
+     * Método de eliminación parte 2
+     * @param nodoEliminar
+     * @param pagina 
+     */
+    private void eliminar_En_Pagina(NodoB nodoEliminar, Pagina pagina ){
         
         
         
@@ -187,7 +196,33 @@ public class ArbolB<E extends Comparable<E>> {
     }
     
     //==================================================MÉTODOS DE BÚSQUEDA==================================================
-
+    /**
+     * Método que me retorna el nodo del valor buscado, este método se utiliza principalmente para eliminar nodos
+     * @param valorBuscado
+     * @return 
+     */
+    public NodoB<E> getNodo(E valorBuscado){
+        return getNodo(raiz, valorBuscado);
+    }
+    
+    private NodoB<E> getNodo(Pagina paginaActual, E valorBuscado){
+        if (paginaActual != null) {
+            //recorrer los hijos de cada clave
+            NodoB<E> nodoActual = paginaActual.primero;
+            while (nodoActual != null) {
+                if (valorBuscado.compareTo(nodoActual.valor) == 0) {
+                    return nodoActual;
+                } else if (valorBuscado.compareTo(nodoActual.valor) < 0) { // Si el valor buscado es menor al del nodo actual.
+                    return getNodo(nodoActual.hijoIzq, valorBuscado);
+                } else if (nodoActual.siguiente == null) { //Si llego al último nodo ahí si debería irse por la derecha.
+                    return getNodo(nodoActual.hijoDer, valorBuscado);
+                }
+                nodoActual = nodoActual.siguiente;
+            }
+        }
+        return null;
+    }
+    
     /**
      * Nota: recordar que este método me devuelve la lista de posibles valores repetidos 
      * o una lista con un único elemento sino existen valores repetidos.

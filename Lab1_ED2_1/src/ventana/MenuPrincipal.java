@@ -24,6 +24,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import estructuras.arbolB.NodoB;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
@@ -70,6 +71,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,6 +156,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setText("Recomendaciones");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -168,9 +177,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(421, 421, 421)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 687, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -182,11 +193,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -309,6 +322,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        jTextArea1.setText("La recomendación para la directora de recursos humanos es que al ingresar y buscar al cliente, lo haga en minusculas, sin tildes y sin espacio (utilizando guión bajo)" );
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -366,24 +383,49 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }
 
+    /** 
+     * 
+     * @param dpiEliminar
+     * @param nombreELiminar 
+     */
     public void delete(long dpiEliminar, String nombreELiminar) {
         Persona persona_Eliminar = new Persona(dpiEliminar, nombreELiminar, "", "");
-        LinkedList lista_buscada_eliminar = arbolPersonas.getValorNodoB_by_Name(persona_Eliminar);
-        String listado = "";
-        for (int i = 0; i < lista_buscada_eliminar.getlength(); i++) {
-            Persona persona2 = (Persona) lista_buscada_eliminar.getNode(i).getValor();
-            if (persona_Eliminar.getNombre().equals(persona2.getNombre()) && persona_Eliminar.getdpi() == persona2.getdpi()) {
-                System.out.println("" + persona2.toString());
-                arbolPersonas.eliminarEnArbol(persona2);
+        NodoB nodoEliminar = arbolPersonas.getNodo(persona_Eliminar);
+        //si tiene una lista de repetidos se trabaja en la lista
+        if (nodoEliminar.cabeza == true) {
+            //eliminar de la lista de repetidos
+            //Primero hay que verificar si el elemento a eliminar es la cabeza
+            if (persona_Eliminar.getNombre().equals(((Persona) nodoEliminar.valor).getNombre()) && persona_Eliminar.getdpi() == ((Persona) nodoEliminar.valor).getdpi()) {
+                //si coincidio
+                //se elimina la primera persona y se le asigna a la primera persona de la lista de repetidos
+                nodoEliminar.valor = (Persona) nodoEliminar.listaRepetidos.extractElement_AtBeggining().getValor();
+            } //Luego de verificar que el elemento a eliminar no es la cabeza
+            //entonces tenemos que buscar el elemento en la lista de repetidos
+            else {
+                //de lo contrario recorremos la lista de repetidos en busca del valor a eliminar
+                for (int i = 0; i < nodoEliminar.listaRepetidos.getlength(); i++) {
+                    Persona personaAux = (Persona) nodoEliminar.listaRepetidos.getNode(i).getValor();
+                    if (persona_Eliminar.getNombre().equals(personaAux.getNombre()) && persona_Eliminar.getdpi() == personaAux.getdpi()) {
+                        nodoEliminar.listaRepetidos.deleteElement_AtPosition(i);
+                        break;
+                    }
+                }
             }
+
+            //una vez ya eliminamos
+            if (nodoEliminar.listaRepetidos.getlength() == 0) { //Verificar como queda la lista del nodo Eliminado
+                nodoEliminar.cabeza = false;
+            }
+        } else { // si no tiene una lista de repetidos se elimina directamente del árbol
+            arbolPersonas.eliminarEnArbol(persona_Eliminar);
         }
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

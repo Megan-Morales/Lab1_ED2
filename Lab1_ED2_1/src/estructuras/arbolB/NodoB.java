@@ -12,14 +12,14 @@ import estructuras.linkedlist.LinkedList;
  */
 public class NodoB<E extends Comparable<E>> {
     //Valores
-    E valor;  //--> clave
+    public E valor;  //--> clave
     //Apuntadores
     NodoB<E> anterior, siguiente;
     Pagina hijoIzq;
     Pagina hijoDer;
     //repetidos
-    LinkedList<E> listaRepetidos;
-    boolean cabeza = false;
+    public LinkedList<E> listaRepetidos;
+    public boolean cabeza = false;
 
     public NodoB(E valor) {  //contructor de mi clase
         this.valor = valor;
