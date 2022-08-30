@@ -74,6 +74,10 @@ public void insertarEnPagina(NodoB nuevo) {
 
         }
     }
+
+    public void eliminarEnPagina(){
+        
+    }
     public void imprimir(){
         NodoB aux=this.primero;
         while(aux.siguiente!=null){

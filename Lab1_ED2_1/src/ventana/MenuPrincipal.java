@@ -235,11 +235,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         }
 
                         if (accion_archivo[0].equals("INSERT")) {
-
                             arbolPersonas.insertarEnArbol(persona);
-                        }
-                        else if(accion_archivo[0].equals("PATCH")){
-                            //patch(dpi, name, datebirth, address);
+                        } else if (accion_archivo[0].equals("PATCH")) {
+                            patch(persona.getdpi(), persona.getNombre(), persona.getFecha(), persona.getDireccion());
+                        } else if (accion_archivo[0].equals("DELETE")) {
+                            delete(persona.getdpi(), persona.getNombre());
                         }
                     }
                     System.out.println("");
@@ -352,7 +352,32 @@ public class MenuPrincipal extends javax.swing.JFrame {
      * @param addressModificar
      */
     public void patch(long dpiBuscar, String nameBuscar, String dateModificar, String addressModificar) {
+        Persona persona_Modificar = new Persona(dpiBuscar, nameBuscar, "", "");
+        LinkedList lista_buscada_modificar = arbolPersonas.getValorNodoB_by_Name(persona_Modificar);
+        String listado = "";
+        for (int i = 0; i < lista_buscada_modificar.getlength(); i++) {
+            Persona persona2 = (Persona) lista_buscada_modificar.getNode(i).getValor();
+            if (persona_Modificar.getNombre().equals(persona2.getNombre()) && persona_Modificar.getdpi() == persona2.getdpi()) {
+                System.out.println("" + persona2.toString());
+                persona2.setFecha(dateModificar);
+                persona2.setDireccion(addressModificar);
+                System.out.println("" + persona2.toString());
+            }
+        }
+    }
 
+    public void delete(long dpiEliminar, String nombreELiminar) {
+        Persona persona_Eliminar = new Persona(dpiEliminar, nombreELiminar, "", "");
+        LinkedList lista_buscada_eliminar = arbolPersonas.getValorNodoB_by_Name(persona_Eliminar);
+        String listado = "";
+        for (int i = 0; i < lista_buscada_eliminar.getlength(); i++) {
+            Persona persona2 = (Persona) lista_buscada_eliminar.getNode(i).getValor();
+            if (persona_Eliminar.getNombre().equals(persona2.getNombre()) && persona_Eliminar.getdpi() == persona2.getdpi()) {
+                System.out.println("" + persona2.toString());
+                arbolPersonas.eliminarEnArbol(persona2);
+            }
+        }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

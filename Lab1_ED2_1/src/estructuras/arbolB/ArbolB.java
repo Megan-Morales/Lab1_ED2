@@ -134,7 +134,25 @@ public class ArbolB<E extends Comparable<E>> {
         nodoGenerado = new NodoB(valorNodoDivisor, rizquierda, rderecha);
         return nodoGenerado;
     }
-
+   //==================================================MÉTODO DE ELIMINACIÓN ==================================================
+    public void eliminarEnArbol(E valor){
+        NodoB nodo = new NodoB(valor);
+        
+        if(this.raiz != null){
+            
+            eliminar_En_Pagina(nodo ,this.raiz);
+        }
+        else{
+            
+        }
+        
+    }
+    
+    public void eliminar_En_Pagina(NodoB nodoEliminar, Pagina pagina ){
+        
+        
+        
+    }
    //==================================================MÉTODOS DE RECORRIDOS==================================================
     /**
      * Parte 1) Método para convertir a una LinkedList mi árbol por medio del recorrido de amplitud.
